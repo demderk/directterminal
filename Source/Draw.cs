@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DirectTerminal
 {
@@ -11,7 +9,7 @@ namespace DirectTerminal
             Console.Clear();
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
-            Console.Write(" SHIFT+X ");
+            Console.Write(" SPACE or ENTER ");
             Console.BackgroundColor = ConsoleColor.DarkCyan;
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" Execute command ");
@@ -25,19 +23,25 @@ namespace DirectTerminal
             Console.ResetColor();
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
-            Console.Write(" CTRL+C ");
-            Console.BackgroundColor = ConsoleColor.DarkCyan;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write(" Exit program ");
-            Console.ResetColor();
-            Console.BackgroundColor = ConsoleColor.White;
-            Console.ForegroundColor = ConsoleColor.Black;
             Console.Write(" SHIFT+P ");
             Console.BackgroundColor = ConsoleColor.DarkCyan;
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(" Pause recieve ");
             Console.ResetColor();
-            Console.BufferHeight = Console.BufferHeight + 1;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.Write(" CTRL+P ");
+            Console.BackgroundColor = ConsoleColor.DarkCyan;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(" Temporary disconnect ");
+            Console.ResetColor();
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.Write(" CTRL+C ");
+            Console.BackgroundColor = ConsoleColor.DarkCyan;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(" Exit program ");
+            Console.ResetColor();
             Console.WriteLine();
             Console.WriteLine();
         }
@@ -52,7 +56,6 @@ namespace DirectTerminal
             Console.WriteLine("Unknown error.");
             Console.WriteLine($"{ex.Message}");
             Console.ResetColor();
-            Console.BufferHeight = Console.BufferHeight + 1;
             Console.WriteLine("Press any button for exit");
             Console.ReadLine();
             return;

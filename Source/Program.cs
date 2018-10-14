@@ -14,9 +14,9 @@ namespace DirectTerminal
         {
             PortInfo portInfo = new PortInfo();
 
-            Console.Title = "Direct Terminal 1.0";
+            Console.Title = "Direct Terminal 1.1";
             //Console.WriteLine("Type COMPortName");
-            Console.WriteLine("By demderk 2018");
+            Console.WriteLine("Direct Terminal 1.1 | demderk 2018");
             Console.WriteLine();
             Console.CancelKeyPress += CancelKey;
 
@@ -115,7 +115,7 @@ namespace DirectTerminal
             {
                 string COMPort = null;
                 int baudRate = -1;
-                Console.WriteLine("*Tip: Use default config file (config.xml) for fast connect.");
+                Console.WriteLine("Tip: Use default preset for fast connect. https://git.io/fxREa");
                 Console.Write("COM port name > ");
                 COMPort = Console.ReadLine();
                 Console.Write("baud rate > ");
@@ -132,7 +132,7 @@ namespace DirectTerminal
                 // Opening port
                 Logic.PortLineEnding = portInfo.lEnd;
                 // End of line mode setting
-                Logic.DTermainalBody(portInfo.sPort);
+                Logic.Start(portInfo.sPort);
             }
             catch (Exception ex)
             {

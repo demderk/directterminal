@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO.Ports;
 using System.Xml;
 
@@ -45,7 +43,7 @@ namespace DirectTerminal
                         //errObject = "COMPort";
                         if (node.Attributes["question"] != null && node.Attributes["question"].Value == "true")
                         {
-                            Console.WriteLine("Config manager: Type COM port name");
+                            Console.Write("Config manager: Type COM port name\n> ");
                             COMPortName = Console.ReadLine();
                         }
                         else

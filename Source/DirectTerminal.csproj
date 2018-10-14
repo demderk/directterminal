@@ -1,11 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <ApplicationIcon></ApplicationIcon>
-    <StartupObject />
+    <StartupObject>DirectTerminal.Program</StartupObject>
+  <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
+  <Authors>demderk</Authors>
+  <PackageLicenseUrl>https://github.com/demderk/directterminal/blob/Release/LICENSE</PackageLicenseUrl>
+  <PackageProjectUrl>https://github.com/demderk/directterminal</PackageProjectUrl>
+  <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="directterminal\**" />
+    <EmbeddedResource Remove="directterminal\**" />
+    <None Remove="directterminal\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
