@@ -2,50 +2,22 @@
 
 namespace DirectTerminal
 {
-    class Draw
+    internal static class Draw
     {
-        public void DrawHeader()
+        static public void DrawHeader()
         {
-            Console.Clear();
-            Console.BackgroundColor = ConsoleColor.White;
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.Write(" SPACE or ENTER ");
-            Console.BackgroundColor = ConsoleColor.DarkCyan;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write(" Execute command ");
-            Console.ResetColor();
-            Console.BackgroundColor = ConsoleColor.White;
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.Write(" SHIFT+C ");
-            Console.BackgroundColor = ConsoleColor.DarkCyan;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write(" Clear console ");
-            Console.ResetColor();
-            Console.BackgroundColor = ConsoleColor.White;
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.Write(" SHIFT+P ");
-            Console.BackgroundColor = ConsoleColor.DarkCyan;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write(" Pause recieve ");
-            Console.ResetColor();
-            Console.BackgroundColor = ConsoleColor.White;
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.Write(" CTRL+P ");
-            Console.BackgroundColor = ConsoleColor.DarkCyan;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write(" Temporary disconnect ");
-            Console.ResetColor();
-            Console.BackgroundColor = ConsoleColor.White;
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.Write(" CTRL+C ");
-            Console.BackgroundColor = ConsoleColor.DarkCyan;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write(" Exit program ");
-            Console.ResetColor();
             Console.WriteLine();
+            Console.WriteLine("#---------------Controls--------------#");
+            Console.WriteLine("| [SPACE] or [ENTER] - execute command|");
+            Console.WriteLine("| [SHIFT+C] - clear console           |");
+            Console.WriteLine("| [SHIFT+P] - pause recieve           |");
+            Console.WriteLine("| [CTRL+P] - temporary disconnect     |");
+            Console.WriteLine("| [CTRL+C] - exit program             |");
+            Console.WriteLine("#-------------------------------------#");
             Console.WriteLine();
+
         }
-        public void CriticalError(Exception ex)
+        static public void CriticalError(Exception ex)
         {
             Console.Clear();
             Console.BackgroundColor = ConsoleColor.White;
@@ -56,11 +28,11 @@ namespace DirectTerminal
             Console.WriteLine("Unknown error.");
             Console.WriteLine($"{ex.Message}");
             Console.ResetColor();
-            Console.WriteLine("Press any button for exit");
-            Console.ReadLine();
+            Console.WriteLine("Press any button for exit.");
+            Console.ReadKey();
             return;
         }
-        public void CriticalError(Exception ex,string errObject)
+        static public void CriticalError(Exception ex, string errObject)
         {
             Console.BackgroundColor = ConsoleColor.DarkRed;
             Console.Clear();
@@ -69,8 +41,22 @@ namespace DirectTerminal
             Console.WriteLine($"{ex.Message} {(errObject == null ? "" : $"Property name is {errObject}")}");
             Console.WriteLine();
             Console.WriteLine("Press any button for exit");
-            Console.ReadLine();
+            Console.ReadKey();
             return;
+        }
+        static public void Error(Exception ex, string beforeString = "Press any button for continue.")
+        {
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("ERROR!");
+            Console.ResetColor();
+            Console.WriteLine($"{ex.Message}");
+            Console.ResetColor();
+            if (!string.IsNullOrEmpty(beforeString))
+            {
+                Console.WriteLine(beforeString);
+                Console.ReadKey();
+            }
         }
     }
 }

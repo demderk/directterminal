@@ -1,13 +1,11 @@
 ﻿using System;
 using System.IO.Ports;
-using System.Collections.Generic;
-using System.Text;
 
 
 
 namespace DirectTerminal
 {
-    class Logic
+    internal class Logic
     {
         private string portLineEndingString = "";
 
@@ -15,10 +13,7 @@ namespace DirectTerminal
 
         public LineEnding PortLineEnding
         {
-            get
-            {
-                return portLineEnding;
-            }
+            get => portLineEnding;
             set
             {
                 portLineEnding = value;
@@ -82,12 +77,11 @@ namespace DirectTerminal
                         else if (ski.Key == ConsoleKey.Spacebar || ski.Key == ConsoleKey.Enter)
                         {
                             // Send mode logic
-                            string commandBuffer = "";
 
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.Write("\nSend> ");
                             Console.ForegroundColor = ConsoleColor.White;
-                            commandBuffer = Console.ReadLine();
+                            string commandBuffer = Console.ReadLine();
 
                             for (int i = 0; i < commandBuffer.Length + 6; i++)
                             {
@@ -114,14 +108,13 @@ namespace DirectTerminal
                         else if (ski.Modifiers == ConsoleModifiers.Shift && ski.Key == ConsoleKey.C)
                         {
                             Console.Clear();
-                            Draw drw = new Draw();
-                            drw.DrawHeader();
+                            Draw.DrawHeader();
                         }
                         else if (ski.Modifiers == ConsoleModifiers.Control && ski.Key == ConsoleKey.P)
                         {
                             port.Close();
                             Console.ForegroundColor = ConsoleColor.DarkGray;
-                            Console.WriteLine("\nTemp stopped... Press CTRL+P again for retry");
+                            Console.WriteLine("\nTemporary stopped... Press CTRL+P again for retry.");
                             Console.ResetColor();
                             while (true)
                             {
@@ -138,13 +131,13 @@ namespace DirectTerminal
                                     catch (Exception ex)
                                     {
                                         Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.WriteLine($"{ex.Message} \nPress CTRL+P again for retry");
+                                        Console.WriteLine($"{ex.Message} \nPress CTRL+P again for retry.");
                                         Console.ResetColor();
                                     }
                                     if (port.IsOpen)
                                     {
                                         Console.ForegroundColor = ConsoleColor.DarkGray;
-                                        Console.WriteLine("Success");
+                                        Console.WriteLine("Success.");
                                         Console.ResetColor();
                                         break;
                                     }

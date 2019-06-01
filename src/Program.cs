@@ -1,38 +1,45 @@
 ﻿using System;
-using System.IO.Ports;
+using System.Collections.Generic;
 using System.IO;
+using System.IO.Ports;
 using System.Xml;
-using System.Linq;
 
 namespace DirectTerminal
 {
-    class Program
+    internal static class ProgramIformation
     {
-        static Draw Drw = new Draw();
-        static Logic Logic = new Logic();
-        static void Main(string[] args)
+        internal const string _VERSION = "1.2";
+    }
+
+    internal class Program
+    {
+        private static readonly Logic Logic = new Logic();
+
+        private static void Main()
+        {
+            Console.Title = $"Direct Terminal {ProgramIformation._VERSION}";
+            Console.WriteLine($"Direct Terminal {ProgramIformation._VERSION} | demderk 2018-2019.");
+            Console.WriteLine();
+            Body();
+
+        }
+
+        private static void Body()
         {
             PortInfo portInfo = new PortInfo();
-
-            Console.Title = "Direct Terminal 1.1";
-            //Console.WriteLine("Type COMPortName");
-            Console.WriteLine("Direct Terminal 1.1 | demderk 2018");
-            Console.WriteLine();
-            Console.CancelKeyPress += CancelKey;
-
             string[] userConfigs = Directory.GetFiles(Directory.GetCurrentDirectory(), "config_*.xml");
             // Find user presets in current directory.
             bool defaultCfgFound = File.Exists("config.xml");
-            string[] allFilesPath = new string[] { };
+            List<string> allFilesPath = new List<string>();
             // All files array (includes default).
             ConfigParser cParser = new ConfigParser();
+
             if (defaultCfgFound && userConfigs.Length >= 0)
             {
                 string errObject = null;
                 XmlDocument xmlDoc = new XmlDocument();
                 try
                 {
-
                     string filePath = "";
                     if (userConfigs.Length > 0)
                     // If user presets find.
@@ -41,11 +48,11 @@ namespace DirectTerminal
                         {
                             if (defaultCfgFound)
                             {
-                                allFilesPath = new string[] { $"{Directory.GetCurrentDirectory()}\\config.xml" };
-                                allFilesPath = allFilesPath.Concat(userConfigs).ToArray();
+                                allFilesPath.Add($"{Directory.GetCurrentDirectory()}\\config.xml");
                             }
+                            allFilesPath.AddRange(userConfigs);
                             Console.WriteLine("Config manager: found several presets.\n\nSelect preset:\n");
-                            for (int i = 0; i < allFilesPath.Length; i++)
+                            for (int i = 0; i < allFilesPath.Count; i++)
                             {
                                 string parsedName = allFilesPath[i]
                                     .Replace(Directory.GetCurrentDirectory(), "")
@@ -62,25 +69,29 @@ namespace DirectTerminal
                                 Console.WriteLine($"[{i}] {parsedName}");
                             }
                             while (true)
-                            // Error format exeption handler.
+                            // Wrong value exeption handler.
                             {
                                 Console.Write("\nSelected > ");
                                 string rL = Console.ReadLine();
                                 try
                                 {
                                     int sI = Convert.ToInt32(rL);
+                                    if (sI > allFilesPath.Count)
+                                    {
+                                        throw new IndexOutOfRangeException();
+                                    }
                                     filePath = allFilesPath[sI];
                                     break;
                                 }
                                 catch (IndexOutOfRangeException)
                                 {
-                                    Console.WriteLine("Wrong number");
+                                    Console.WriteLine("Wrong number.");
                                 }
                                 catch (FormatException)
                                 {
                                     if (rL.Replace(" ", "") != "")
                                     {
-                                        Console.WriteLine("Incorrect format");
+                                        Console.WriteLine("Incorrect format.");
                                     }
                                 }
                             }
@@ -94,57 +105,50 @@ namespace DirectTerminal
                     {
                         filePath = "config.xml";
                     }
-                    xmlDoc.Load(filePath); 
+                    xmlDoc.Load(filePath);
                     // Load file by link
                     portInfo = cParser.BuildPort(xmlDoc);
                     // Sending file to parser
                 }
                 catch (XmlException ex)
                 {
-                    Drw.CriticalError(ex, errObject);
+                    Draw.CriticalError(ex, errObject);
                     return;
                 }
                 catch (Exception ex)
                 {
-                    Drw.CriticalError(ex);
+                    Draw.CriticalError(ex);
                     return;
                 }
             }
             else
             // If default config not exists
             {
-                string COMPort = null;
-                int baudRate = -1;
-                Console.WriteLine("Tip: Use default preset for fast connect. https://git.io/fxREa");
+                Console.WriteLine("Tip: Use default preset for fast connect. https://github.com/demderk/directterminal#readme");
                 Console.Write("COM port name > ");
-                COMPort = Console.ReadLine();
-                Console.Write("baud rate > ");
-                baudRate = Convert.ToInt32(Console.ReadLine());
+                string COMPort = Console.ReadLine();
+                Console.Write("Baud rate > ");
+                int baudRate = Convert.ToInt32(Console.ReadLine());
                 portInfo.lEnd = LineEnding.NL;
                 portInfo.sPort = new SerialPort(COMPort, baudRate);
             }
 
             try
             {
-                Drw.DrawHeader();
-                // Drawing header
                 portInfo.sPort.Open();
-                // Opening port
+                Draw.DrawHeader();
                 Logic.PortLineEnding = portInfo.lEnd;
-                // End of line mode setting
                 Logic.Start(portInfo.sPort);
+            }
+            catch (IOException ex)
+            {
+                Draw.Error(ex);
+                Body();
             }
             catch (Exception ex)
             {
-                Drw.CriticalError(ex);
+                Draw.CriticalError(ex);
             }
-        }
-
-        private static void CancelKey(object sender, ConsoleCancelEventArgs e)
-        {
-            Console.WriteLine("Break");
-            Logic.IsCanceled = true;
-            Console.ReadLine(); // For vs debugger
         }
     }
 }
